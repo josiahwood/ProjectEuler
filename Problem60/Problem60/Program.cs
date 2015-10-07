@@ -12,10 +12,12 @@ namespace Problem60
 		static long[] _primes = new long[1000];
 		static int _primeCount = 0;
 		static List<long> _pairCount = new List<long>();
-		const int _size = 5;
+		const int _size = 4;
 		
 		static void Main(string[] args)
 		{
+			DateTime start = DateTime.Now;
+
 			AddPrime(2);
 			AddPrime(3);
 
@@ -30,6 +32,7 @@ namespace Problem60
 			}
 
 			List<int> candidatePrimeIndices = new List<int>();
+			int[] cpi = new int[_size];
 
 			while (true)
 			{
@@ -57,8 +60,6 @@ namespace Problem60
 
 					if (candidatesAdded > 0 && candidatePrimeIndices.Count >= _size)
 					{
-						int[] cpi = new int[_size];
-
 						for (int i = 0; i < _size; i++)
 						{
 							cpi[i] = candidatePrimeIndices.Count - _size + i;
@@ -105,6 +106,7 @@ namespace Problem60
 								}
 
 								Console.WriteLine("SUM: {0}", sum);
+								Console.WriteLine(DateTime.Now - start);
 								Console.Read();
 								return;
 							}
@@ -116,25 +118,23 @@ namespace Problem60
 
 				Increment(p);
 			}
-
 		}
 
 		private static bool Test(int index1, int index2)
 		{
-			bool isPrime;
-
 			long p1 = _primes[index1];
 			long p2 = _primes[index2];
 			long test = Concat(p1, p2);
-			isPrime = IsPrime(test);
-
-			if (isPrime)
+			
+			if (IsPrime(test))
 			{
 				test = Concat(p2, p1);
-				isPrime = IsPrime(test);
+				return IsPrime(test);
 			}
-
-			return isPrime;
+			else
+			{
+				return false;
+			}
 		}
 
 		private static long Concat(long i1, long i2)
@@ -194,21 +194,15 @@ namespace Problem60
 
 			int min = 0;
 			int max = _primeCount - 1;
-			bool isPrime = false;
 
-			while (true)
+			while (min <= max)
 			{
 				int test = (max + min) >> 1;
 				long value = _primes[test];
 
 				if (value == n)
 				{
-					isPrime = true;
-					break;
-				}
-				else if (min >= max)
-				{
-					break;
+					return true;
 				}
 				else if (value < n)
 				{
@@ -220,7 +214,7 @@ namespace Problem60
 				}
 			}
 
-			return isPrime;
+			return false;
 		}
 
 		private static void EnsureMinimumPrime(long n)
@@ -269,8 +263,10 @@ namespace Problem60
 			}
 		}
 
-		private static void AddPrime(long n){
-			if(_primeCount == _primes.Length){
+		private static void AddPrime(long n)
+		{
+			if (_primeCount == _primes.Length)
+			{
 				long[] newPrimes = new long[_primes.Length + 1000];
 				Array.Copy(_primes, newPrimes, _primeCount);
 				_primes = newPrimes;
