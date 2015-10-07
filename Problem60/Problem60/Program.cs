@@ -12,7 +12,7 @@ namespace Problem60
 		static long[] _primes = new long[1000];
 		static int _primeCount = 0;
 		static List<long> _pairCount = new List<long>();
-		const int _size = 4;
+		const int _size = 5;
 		
 		static void Main(string[] args)
 		{
