@@ -9,8 +9,11 @@ namespace Problem60
 {
 	class Program
 	{
-		static long[] _primes = new long[1000];
-		static int _primeCount = 0;
+		/// <summary>
+		/// number = 2 * index + 3
+		/// </summary>
+		static BitArray _isPrime = new BitArray(30000, true);
+		
 		static List<long> _pairCount = new List<long>();
 		const int _size = 5;
 		
@@ -18,10 +21,7 @@ namespace Problem60
 		{
 			DateTime start = DateTime.Now;
 
-			AddPrime(2);
-			AddPrime(3);
-
-			EnsureMinimumPrime(100);
+			PopulateIsPrime();
 
 			// prime indexes
 			int[] p = new int[2];
@@ -100,7 +100,7 @@ namespace Problem60
 
 								for (int i = 0; i < _size; i++)
 								{
-									resultPrimes[i] = _primes[candidatePrimeIndices[cpi[i]]];
+									//resultPrimes[i] = _primes[candidatePrimeIndices[cpi[i]]];
 									Console.WriteLine(resultPrimes[i]);
 									sum += resultPrimes[i];
 								}
@@ -120,15 +120,13 @@ namespace Problem60
 			}
 		}
 
-		private static bool Test(int index1, int index2)
+		private static bool Test(int prime1, int prime2)
 		{
-			long p1 = _primes[index1];
-			long p2 = _primes[index2];
-			long test = Concat(p1, p2);
+			int test = Concat(prime1, prime2);
 			
 			if (IsPrime(test))
 			{
-				test = Concat(p2, p1);
+				test = Concat(prime2, prime1);
 				return IsPrime(test);
 			}
 			else
@@ -137,9 +135,9 @@ namespace Problem60
 			}
 		}
 
-		private static long Concat(long i1, long i2)
+		private static int Concat(int i1, int i2)
 		{
-			long t2 = i2;
+			int t2 = i2;
 
 			while (t2 > 0)
 			{
@@ -147,7 +145,7 @@ namespace Problem60
 				t2 /= 10;
 			}
 
-			long t = i1 + i2;
+			int t = i1 + i2;
 
 			return t;
 		}
@@ -188,93 +186,103 @@ namespace Problem60
 			}
 		}
 
-		private static bool IsPrime(long n)
+		private static bool IsPrime(int n)
 		{
-			EnsureMinimumPrime(n);
-
-			int min = 0;
-			int max = _primeCount - 1;
-
-			while (min <= max)
+			if (n < 2)
 			{
-				int test = (max + min) >> 1;
-				long value = _primes[test];
-
-				if (value == n)
-				{
-					return true;
-				}
-				else if (value < n)
-				{
-					min = test + 1;
-				}
-				else
-				{
-					max = test - 1;
-				}
+				return false;
 			}
-
-			return false;
-		}
-
-		private static void EnsureMinimumPrime(long n)
-		{
-			while (_primes[_primeCount - 1] < n)
+			else if (n == 2)
 			{
-				AddNextPrime();
+				return true;
+			}
+			else if (n % 2 == 0)
+			{
+				return false;
+			}
+			else
+			{
+				return _isPrime[(n - 3) / 2];
 			}
 		}
 
-		private static void AddNextPrime()
-		{
-			int i = _primeCount;
+		//private static void EnsureMinimumPrime(int n)
+		//{
+		//	while (_isPrime.Length < n)
+		//	{
+		//		AddNextPrime();
+		//	}
+		//}
+
+		//private static void AddNextPrime()
+		//{
+		//	int i = _primeCount;
 			
-			// find the ith prime
+		//	// find the ith prime
 
-			for (long j = _primes[i - 1] + 2; ; j += 2)
-			{
-				// is j the ith prime?
+		//	for (long j = _primes[i - 1] + 2; ; j += 2)
+		//	{
+		//		// is j the ith prime?
 
-				long sqrt = (long)Math.Sqrt(j);
+		//		long sqrt = (long)Math.Sqrt(j);
 
-				bool factorfound = false;
+		//		bool factorfound = false;
 
-				for (int k = 1; k < i; k++)
-				{
-					long p = _primes[k];
+		//		for (int k = 1; k < i; k++)
+		//		{
+		//			long p = _primes[k];
 					
-					if (p > sqrt)
-					{
-						break;
-					}
+		//			if (p > sqrt)
+		//			{
+		//				break;
+		//			}
 
-					if (j % p == 0)
-					{
-						factorfound = true;
-						break;
-					}
-				}
+		//			if (j % p == 0)
+		//			{
+		//				factorfound = true;
+		//				break;
+		//			}
+		//		}
 
-				if (!factorfound)
-				{
-					AddPrime(j);
-					return;
-				}
-			}
-		}
+		//		if (!factorfound)
+		//		{
+		//			AddPrime(j);
+		//			return;
+		//		}
+		//	}
+		//}
 
-		private static void AddPrime(long n)
+		//private static void AddPrime(long n)
+		//{
+		//	if (_primeCount == _primes.Length)
+		//	{
+		//		long[] newPrimes = new long[_primes.Length + 1000];
+		//		Array.Copy(_primes, newPrimes, _primeCount);
+		//		_primes = newPrimes;
+		//	}
+
+		//	_primes[_primeCount] = n;
+		//	_pairCount.Add(0);
+		//	_primeCount++;
+		//}
+
+		static void PopulateIsPrime()
 		{
-			if (_primeCount == _primes.Length)
-			{
-				long[] newPrimes = new long[_primes.Length + 1000];
-				Array.Copy(_primes, newPrimes, _primeCount);
-				_primes = newPrimes;
-			}
+			int maxValue = 2 * (_isPrime.Length - 1) + 3;
 
-			_primes[_primeCount] = n;
-			_pairCount.Add(0);
-			_primeCount++;
+			for (int i = 0; i < _isPrime.Length; i++)
+			{
+				if (_isPrime[i])
+				{
+					int n = 2 * i + 3;
+					int inc = 2 * n;
+
+					for (int j = n + inc; j <= maxValue; j += inc)
+					{
+						_isPrime[(j - 3) / 2] = false;
+					}
+				}
+			}
 		}
 	}
 }
