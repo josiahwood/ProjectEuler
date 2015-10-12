@@ -12,10 +12,10 @@ namespace Problem60
 		/// <summary>
 		/// number = 2 * index + 3
 		/// </summary>
-		static BitArray _isPrime = new BitArray(30000, true);
+		const int _maxNumber = 100000000;
+		static BitArray _isPrime = new BitArray((_maxNumber - 3) / 2, true);
 		
 		static List<long> _pairCount = new List<long>();
-		const int _size = 5;
 		
 		static void Main(string[] args)
 		{
@@ -23,101 +23,49 @@ namespace Problem60
 
 			PopulateIsPrime();
 
-			// prime indexes
-			int[] p = new int[2];
+			long lowestSum = long.MaxValue;
 
-			for (int i = 0; i < p.Length; i++)
+			long max = (long)Math.Sqrt(_maxNumber);
+
+			for (int p0 = 4; p0 < max; p0++)
 			{
-				p[i] = i;
-			}
-
-			List<int> candidatePrimeIndices = new List<int>();
-			int[] cpi = new int[_size];
-
-			while (true)
-			{
-				bool test = Test(p[0], p[1]);
-
-				if (test)
+				if (IsPrime(p0))
 				{
-					_pairCount[p[0]]++;
-					_pairCount[p[1]]++;
-					int candidatesAdded = 0;
-
-					if (_pairCount[p[0]] == _size - 1)
+					for (int p1 = p0 - 1; p1 >= 0; p1--)
 					{
-						candidatePrimeIndices.Add(p[0]);
-						candidatesAdded++;
-					}
-
-					if (_pairCount[p[1]] == _size - 1)
-					{
-						candidatePrimeIndices.Add(p[1]);
-						candidatesAdded++;
-					}
-
-					// clique problem
-
-					if (candidatesAdded > 0 && candidatePrimeIndices.Count >= _size)
-					{
-						for (int i = 0; i < _size; i++)
+						if (IsPrime(p1) && Test(p1, p0))
 						{
-							cpi[i] = candidatePrimeIndices.Count - _size + i;
-						}
-
-						int min = candidatePrimeIndices.Count - candidatesAdded;
-
-						while (cpi[_size - 1] >= min)
-						{
-							//test these indices to see if they are all connected
-
-							bool connected = true;
-
-							for (int i = 1; i < _size; i++)
+							for (int p2 = p1 - 1; p2 >= 0; p2--)
 							{
-								for (int j = 0; j < i; j++)
+								if (IsPrime(p2) && Test(p2, p0) && Test(p2, p1))
 								{
-									int pi1 = candidatePrimeIndices[cpi[i]];
-									int pi2 = candidatePrimeIndices[cpi[j]];
-
-									if (!Test(pi1, pi2))
+									for (int p3 = p2 - 1; p3 >= 0; p3--)
 									{
-										connected = false;
-										break;
+										if (IsPrime(p3) && Test(p3, p0) && Test(p3, p1) && Test(p3, p2))
+										{
+											for (int p4 = p3 - 1; p4 >= 0; p4--)
+											{
+												if (IsPrime(p4) && Test(p4, p0) && Test(p4, p1) && Test(p4, p2) && Test(p4, p3))
+												{
+													long sum = p0 + p1 + p2 + p3 + p4;
+
+													if (sum < lowestSum)
+													{
+														lowestSum = sum;
+													}
+												}
+											}
+										}
 									}
 								}
-
-								if (!connected)
-								{
-									break;
-								}
 							}
-
-							if (connected)
-							{
-								long sum = 0;
-								long[] resultPrimes = new long[_size];
-
-								for (int i = 0; i < _size; i++)
-								{
-									//resultPrimes[i] = _primes[candidatePrimeIndices[cpi[i]]];
-									Console.WriteLine(resultPrimes[i]);
-									sum += resultPrimes[i];
-								}
-
-								Console.WriteLine("SUM: {0}", sum);
-								Console.WriteLine(DateTime.Now - start);
-								Console.Read();
-								return;
-							}
-
-							Decrement(cpi);
 						}
 					}
 				}
-
-				Increment(p);
 			}
+
+			Console.WriteLine(lowestSum);
+			Console.Read();
 		}
 
 		private static bool Test(int prime1, int prime2)
@@ -150,42 +98,6 @@ namespace Problem60
 			return t;
 		}
 
-		private static void Increment(int[] p)
-		{
-			p[0]++;
-
-			for (int i = 1; i < p.Length; i++)
-			{
-				if (p[i] == p[i - 1])
-				{
-					p[i]++;
-
-					for (int j = 0; j < i; j++)
-					{
-						p[j] = j;
-					}
-				}
-			}
-		}
-
-		private static void Decrement(int[] p)
-		{
-			p[0]--;
-
-			for (int i = 0; i < p.Length - 1; i++)
-			{
-				if (p[i] < i)
-				{
-					p[i + 1]--;
-					
-					for (int j = i; j >= 0; j--)
-					{
-						p[j] = p[j + 1] - 1;
-					}
-				}
-			}
-		}
-
 		private static bool IsPrime(int n)
 		{
 			if (n < 2)
@@ -205,66 +117,6 @@ namespace Problem60
 				return _isPrime[(n - 3) / 2];
 			}
 		}
-
-		//private static void EnsureMinimumPrime(int n)
-		//{
-		//	while (_isPrime.Length < n)
-		//	{
-		//		AddNextPrime();
-		//	}
-		//}
-
-		//private static void AddNextPrime()
-		//{
-		//	int i = _primeCount;
-			
-		//	// find the ith prime
-
-		//	for (long j = _primes[i - 1] + 2; ; j += 2)
-		//	{
-		//		// is j the ith prime?
-
-		//		long sqrt = (long)Math.Sqrt(j);
-
-		//		bool factorfound = false;
-
-		//		for (int k = 1; k < i; k++)
-		//		{
-		//			long p = _primes[k];
-					
-		//			if (p > sqrt)
-		//			{
-		//				break;
-		//			}
-
-		//			if (j % p == 0)
-		//			{
-		//				factorfound = true;
-		//				break;
-		//			}
-		//		}
-
-		//		if (!factorfound)
-		//		{
-		//			AddPrime(j);
-		//			return;
-		//		}
-		//	}
-		//}
-
-		//private static void AddPrime(long n)
-		//{
-		//	if (_primeCount == _primes.Length)
-		//	{
-		//		long[] newPrimes = new long[_primes.Length + 1000];
-		//		Array.Copy(_primes, newPrimes, _primeCount);
-		//		_primes = newPrimes;
-		//	}
-
-		//	_primes[_primeCount] = n;
-		//	_pairCount.Add(0);
-		//	_primeCount++;
-		//}
 
 		static void PopulateIsPrime()
 		{
