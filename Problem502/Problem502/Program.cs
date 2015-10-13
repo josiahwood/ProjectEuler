@@ -30,18 +30,18 @@ namespace Problem502
 	
 	public struct Result
 	{
-		public BigInteger MaxHeightOdd;
-		public BigInteger MaxHeightEven;
-		public BigInteger NotMaxHeightOdd;
-		public BigInteger NotMaxHeightEven;
+		public ulong MaxHeightOdd;
+		public ulong MaxHeightEven;
+		public ulong NotMaxHeightOdd;
+		public ulong NotMaxHeightEven;
 
 		public static Result operator +(Result left, Result right)
 		{
 			Result result;
-			result.MaxHeightEven = left.MaxHeightEven + right.MaxHeightEven;
-			result.MaxHeightOdd = left.MaxHeightOdd + right.MaxHeightOdd;
-			result.NotMaxHeightEven = left.NotMaxHeightEven + right.NotMaxHeightEven;
-			result.NotMaxHeightOdd = left.NotMaxHeightOdd + right.NotMaxHeightOdd;
+			result.MaxHeightEven = (left.MaxHeightEven + right.MaxHeightEven) % Program.Mod;
+			result.MaxHeightOdd = (left.MaxHeightOdd + right.MaxHeightOdd) % Program.Mod;
+			result.NotMaxHeightEven = (left.NotMaxHeightEven + right.NotMaxHeightEven) % Program.Mod;
+			result.NotMaxHeightOdd = (left.NotMaxHeightOdd + right.NotMaxHeightOdd) % Program.Mod;
 			return result;
 		}
 
@@ -49,25 +49,25 @@ namespace Problem502
 		{
 			Result result = new Result();
 
-			result.MaxHeightEven += left.MaxHeightEven * right.MaxHeightEven;
-			result.MaxHeightOdd += left.MaxHeightEven * right.MaxHeightOdd;
-			result.MaxHeightEven += left.MaxHeightEven * right.NotMaxHeightEven;
-			result.MaxHeightOdd += left.MaxHeightEven * right.NotMaxHeightOdd;
+			result.MaxHeightEven += (left.MaxHeightEven * right.MaxHeightEven) % Program.Mod;
+			result.MaxHeightOdd += (left.MaxHeightEven * right.MaxHeightOdd) % Program.Mod;
+			result.MaxHeightEven += (left.MaxHeightEven * right.NotMaxHeightEven) % Program.Mod;
+			result.MaxHeightOdd += (left.MaxHeightEven * right.NotMaxHeightOdd) % Program.Mod;
 
-			result.MaxHeightOdd += left.MaxHeightOdd * right.MaxHeightEven;
-			result.MaxHeightEven += left.MaxHeightOdd * right.MaxHeightOdd;
-			result.MaxHeightOdd += left.MaxHeightOdd * right.NotMaxHeightEven;
-			result.MaxHeightEven += left.MaxHeightOdd * right.NotMaxHeightOdd;
+			result.MaxHeightOdd += (left.MaxHeightOdd * right.MaxHeightEven) % Program.Mod;
+			result.MaxHeightEven += (left.MaxHeightOdd * right.MaxHeightOdd) % Program.Mod;
+			result.MaxHeightOdd += (left.MaxHeightOdd * right.NotMaxHeightEven) % Program.Mod;
+			result.MaxHeightEven += (left.MaxHeightOdd * right.NotMaxHeightOdd) % Program.Mod;
 
-			result.MaxHeightEven += left.NotMaxHeightEven * right.MaxHeightEven;
-			result.MaxHeightOdd += left.NotMaxHeightEven * right.MaxHeightOdd;
-			result.NotMaxHeightEven += left.NotMaxHeightEven * right.NotMaxHeightEven;
-			result.NotMaxHeightOdd += left.NotMaxHeightEven * right.NotMaxHeightOdd;
+			result.MaxHeightEven += (left.NotMaxHeightEven * right.MaxHeightEven) % Program.Mod;
+			result.MaxHeightOdd += (left.NotMaxHeightEven * right.MaxHeightOdd) % Program.Mod;
+			result.NotMaxHeightEven += (left.NotMaxHeightEven * right.NotMaxHeightEven) % Program.Mod;
+			result.NotMaxHeightOdd += (left.NotMaxHeightEven * right.NotMaxHeightOdd) % Program.Mod;
 
-			result.MaxHeightOdd += left.NotMaxHeightOdd * right.MaxHeightEven;
-			result.MaxHeightEven += left.NotMaxHeightOdd * right.MaxHeightOdd;
-			result.NotMaxHeightOdd += left.NotMaxHeightOdd * right.NotMaxHeightEven;
-			result.NotMaxHeightEven += left.NotMaxHeightOdd * right.NotMaxHeightOdd;
+			result.MaxHeightOdd += (left.NotMaxHeightOdd * right.MaxHeightEven) % Program.Mod;
+			result.MaxHeightEven += (left.NotMaxHeightOdd * right.MaxHeightOdd) % Program.Mod;
+			result.NotMaxHeightOdd += (left.NotMaxHeightOdd * right.NotMaxHeightEven) % Program.Mod;
+			result.NotMaxHeightEven += (left.NotMaxHeightOdd * right.NotMaxHeightOdd) % Program.Mod;
 
 			return result;
 		}
@@ -75,6 +75,7 @@ namespace Problem502
 
 	public class Program
 	{
+		public const ulong Mod = 1000000007;
 		static SplayTree<Request, Result> _withoutBaseResults = new SplayTree<Request, Result>();
 		
 		static void Main(string[] args)
@@ -118,10 +119,10 @@ namespace Problem502
 			}
 			else if (w == 1)
 			{
-				result.MaxHeightEven = 1 - h % 2;
-				result.MaxHeightOdd = h % 2;
-				result.NotMaxHeightEven = ((h + 1) >> 1) - 1;
-				result.NotMaxHeightOdd = h >> 1;
+				result.MaxHeightEven = (ulong)(1 - h % 2);
+				result.MaxHeightOdd = (ulong)(h % 2);
+				result.NotMaxHeightEven = (ulong)((((h + 1) >> 1) - 1) % Mod);
+				result.NotMaxHeightOdd = (ulong)((h >> 1) % Mod);
 
 				return result;
 			}
@@ -155,10 +156,10 @@ namespace Problem502
 			}
 			else if (w == 1)
 			{
-				result.MaxHeightEven = 1 - h % 2;
-				result.MaxHeightOdd = h % 2;
-				result.NotMaxHeightEven = (h + 1) >> 1;
-				result.NotMaxHeightOdd = h >> 1;
+				result.MaxHeightEven = (ulong)(1 - h % 2);
+				result.MaxHeightOdd = (ulong)(h % 2);
+				result.NotMaxHeightEven = (ulong)(((h + 1) >> 1) % Mod);
+				result.NotMaxHeightOdd = (ulong)((h >> 1) % Mod);
 
 				return result;
 			}
