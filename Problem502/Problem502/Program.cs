@@ -8,10 +8,24 @@ using System.Threading.Tasks;
 
 namespace Problem502
 {
-	struct Request
+	struct Request : IComparable<Request>
 	{
 		public BigInteger Width;
 		public BigInteger Height;
+
+		public int CompareTo(Request other)
+		{
+			int c = Width.CompareTo(other.Width);
+
+			if (c == 0)
+			{
+				return Height.CompareTo(other.Height);
+			}
+			else
+			{
+				return c;
+			}
+		}
 	}
 	
 	public struct Result
@@ -58,19 +72,24 @@ namespace Problem502
 			return result;
 		}
 	}
-	
+
 	public class Program
 	{
-		static Dictionary<Request, Result> _withBaseResults = new Dictionary<Request, Result>();
-		static Dictionary<Request, Result> _withoutBaseResults = new Dictionary<Request, Result>();
+		static SplayTree<Request, Result> _withoutBaseResults = new SplayTree<Request, Result>();
 		
 		static void Main(string[] args)
 		{
-			Result result = WithBase(4, 2);
-			Console.WriteLine(result.MaxHeightEven);
+			//Result result0 = WithBase(BigInteger.Pow(10, 12), 100);
+			//Console.WriteLine(result0.MaxHeightEven);
 
-			result = WithBase(13, 10);
-			Console.WriteLine(result.MaxHeightEven);
+			// precalculate to avoid stack overflows
+			for (int i = 10; i < 10000; i += 10)
+			{
+				WithBase(i, i);
+			}
+			
+			Result result1 = WithBase(10000, 10000);
+			Console.WriteLine(result1.MaxHeightEven);
 			
 			Console.Read();
 		}
@@ -101,8 +120,8 @@ namespace Problem502
 			{
 				result.MaxHeightEven = 1 - h % 2;
 				result.MaxHeightOdd = h % 2;
-				result.NotMaxHeightEven = (h + 1) / 2 - 1;
-				result.NotMaxHeightOdd = h / 2;
+				result.NotMaxHeightEven = ((h + 1) >> 1) - 1;
+				result.NotMaxHeightOdd = h >> 1;
 
 				return result;
 			}
@@ -111,11 +130,6 @@ namespace Problem502
 			request.Width = w;
 			request.Height = h;
 			
-			if (_withBaseResults.TryGetValue(request, out result))
-			{
-				return result;
-			}
-
 			Result subResult = WithoutBase(w, h - 1);
 
 			result.MaxHeightEven = subResult.MaxHeightOdd;
@@ -123,7 +137,6 @@ namespace Problem502
 			result.NotMaxHeightEven = subResult.NotMaxHeightOdd;
 			result.NotMaxHeightOdd = subResult.NotMaxHeightEven;
 
-			_withBaseResults.Add(request, result);
 			return result;
 		}
 
@@ -144,8 +157,8 @@ namespace Problem502
 			{
 				result.MaxHeightEven = 1 - h % 2;
 				result.MaxHeightOdd = h % 2;
-				result.NotMaxHeightEven = (h + 1) / 2;
-				result.NotMaxHeightOdd = h / 2;
+				result.NotMaxHeightEven = (h + 1) >> 1;
+				result.NotMaxHeightOdd = h >> 1;
 
 				return result;
 			}
@@ -171,29 +184,6 @@ namespace Problem502
 
 			_withoutBaseResults.Add(request, result);
 			return result;
-		}
-
-		/// <summary>
-		/// Choose k from n
-		/// </summary>
-		/// <param name="n"></param>
-		/// <param name="k"></param>
-		/// <returns></returns>
-		static BigInteger PascalsTriangle(BigInteger n, BigInteger k)
-		{
-			return Factorial(n) / (Factorial(k) * (Factorial(n - k)));
-		}
-
-		static BigInteger Factorial(BigInteger n)
-		{
-			BigInteger a = 1;
-
-			for (BigInteger i = 2; i <= n; i++)
-			{
-				a *= i;
-			}
-
-			return a;
 		}
 	}
 }

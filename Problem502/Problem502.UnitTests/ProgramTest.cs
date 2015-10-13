@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Numerics;
 
 namespace Problem502.UnitTests
 {
@@ -180,6 +181,14 @@ namespace Problem502.UnitTests
 		{
 			Result result = Program.WithBase(10, 13);
 			Assert.AreEqual(37959702514, result.MaxHeightEven);
+		}
+
+		[TestMethod]
+		public void WithBase100_100()
+		{
+			Result result = Program.WithBase(100, 100);
+			BigInteger actual = result.MaxHeightEven % 1000000007;
+			Assert.AreEqual(841913936, actual);
 		}
 	}
 }
