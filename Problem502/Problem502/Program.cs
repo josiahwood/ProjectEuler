@@ -20,6 +20,43 @@ namespace Problem502
 		public BigInteger MaxHeightEven;
 		public BigInteger NotMaxHeightOdd;
 		public BigInteger NotMaxHeightEven;
+
+		public static Result operator +(Result left, Result right)
+		{
+			Result result;
+			result.MaxHeightEven = left.MaxHeightEven + right.MaxHeightEven;
+			result.MaxHeightOdd = left.MaxHeightOdd + right.MaxHeightOdd;
+			result.NotMaxHeightEven = left.NotMaxHeightEven + right.NotMaxHeightEven;
+			result.NotMaxHeightOdd = left.NotMaxHeightOdd + right.NotMaxHeightOdd;
+			return result;
+		}
+
+		public static Result operator *(Result left, Result right)
+		{
+			Result result = new Result();
+
+			result.MaxHeightEven += left.MaxHeightEven * right.MaxHeightEven;
+			result.MaxHeightOdd += left.MaxHeightEven * right.MaxHeightOdd;
+			result.MaxHeightEven += left.MaxHeightEven * right.NotMaxHeightEven;
+			result.MaxHeightOdd += left.MaxHeightEven * right.NotMaxHeightOdd;
+
+			result.MaxHeightOdd += left.MaxHeightOdd * right.MaxHeightEven;
+			result.MaxHeightEven += left.MaxHeightOdd * right.MaxHeightOdd;
+			result.MaxHeightOdd += left.MaxHeightOdd * right.NotMaxHeightEven;
+			result.MaxHeightEven += left.MaxHeightOdd * right.NotMaxHeightOdd;
+
+			result.MaxHeightEven += left.NotMaxHeightEven * right.MaxHeightEven;
+			result.MaxHeightOdd += left.NotMaxHeightEven * right.MaxHeightOdd;
+			result.NotMaxHeightEven += left.NotMaxHeightEven * right.NotMaxHeightEven;
+			result.NotMaxHeightOdd += left.NotMaxHeightEven * right.NotMaxHeightOdd;
+
+			result.MaxHeightOdd += left.NotMaxHeightOdd * right.MaxHeightEven;
+			result.MaxHeightEven += left.NotMaxHeightOdd * right.MaxHeightOdd;
+			result.NotMaxHeightOdd += left.NotMaxHeightOdd * right.NotMaxHeightEven;
+			result.NotMaxHeightEven += left.NotMaxHeightOdd * right.NotMaxHeightOdd;
+
+			return result;
+		}
 	}
 	
 	public class Program
@@ -51,6 +88,24 @@ namespace Problem502
 				
 				return result;
 			}
+			else if (h == 1)
+			{
+				result.MaxHeightEven = 0;
+				result.MaxHeightOdd = 1;
+				result.NotMaxHeightEven = 0;
+				result.NotMaxHeightOdd = 0;
+
+				return result;
+			}
+			else if (w == 1)
+			{
+				result.MaxHeightEven = 1 - h % 2;
+				result.MaxHeightOdd = h % 2;
+				result.NotMaxHeightEven = (h + 1) / 2 - 1;
+				result.NotMaxHeightOdd = h / 2;
+
+				return result;
+			}
 			
 			Request request = new Request();
 			request.Width = w;
@@ -61,41 +116,15 @@ namespace Problem502
 				return result;
 			}
 
-			if (h == 2)
-			{
-				// Change to ModPow later
-				BigInteger count = BigInteger.Pow(2, (int)w) - 1;
-				
-				BigInteger evenCount = 0;
+			Result subResult = WithoutBase(w, h - 1);
 
-				//optimize
-				for (BigInteger i = 1; i <= w; i++)
-				{
-					evenCount += i;
-				}
-				
-				BigInteger oddCount = count - evenCount;
+			result.MaxHeightEven = subResult.MaxHeightOdd;
+			result.MaxHeightOdd = subResult.MaxHeightEven;
+			result.NotMaxHeightEven = subResult.NotMaxHeightOdd;
+			result.NotMaxHeightOdd = subResult.NotMaxHeightEven;
 
-				result.MaxHeightEven = evenCount;
-				result.MaxHeightOdd = oddCount;
-				result.NotMaxHeightEven = 0;
-				result.NotMaxHeightOdd = 1;
-
-				_withBaseResults.Add(request, result);
-				return result;
-			}
-			else
-			{
-				Result subResult = WithoutBase(w, h - 1);
-
-				result.MaxHeightEven = subResult.MaxHeightOdd;
-				result.MaxHeightOdd = subResult.MaxHeightEven;
-				result.NotMaxHeightEven = subResult.NotMaxHeightOdd;
-				result.NotMaxHeightOdd = subResult.NotMaxHeightEven;
-
-				_withBaseResults.Add(request, result);
-				return result;
-			}
+			_withBaseResults.Add(request, result);
+			return result;
 		}
 
 		public static Result WithoutBase(BigInteger w, BigInteger h)
@@ -111,6 +140,15 @@ namespace Problem502
 
 				return result;
 			}
+			else if (w == 1)
+			{
+				result.MaxHeightEven = 1 - h % 2;
+				result.MaxHeightOdd = h % 2;
+				result.NotMaxHeightEven = (h + 1) / 2;
+				result.NotMaxHeightOdd = h / 2;
+
+				return result;
+			}
 			
 			Request request = new Request();
 			request.Width = w;
@@ -121,84 +159,18 @@ namespace Problem502
 				return result;
 			}
 			
-			if (h == 1)
+			result = WithBase(w, h);
+
+			for (BigInteger i = 0; i < w; i++)
 			{
-				// Change to ModPow later
-				BigInteger count = BigInteger.Pow(2, (int)w) - 1;
-
-				BigInteger oddCount = 0;
-
-				//optimize
-				for (BigInteger i = 1; i <= w; i++)
-				{
-					oddCount += i;
-				}
-
-				BigInteger evenCount = count - oddCount;
-
-				result.MaxHeightEven = evenCount;
-				result.MaxHeightOdd = oddCount;
-				result.NotMaxHeightEven = 1;
-				result.NotMaxHeightOdd = 0;
-
-				_withoutBaseResults.Add(request, result);
-				return result;
-			}
-			else
-			{
-				result = WithBase(w, h);
-
-				for (BigInteger i = 0; i < w; i++)
-				{
-					Result withResult = WithBase(i, h);
-					Result withoutResult = WithoutBase(w - i - 1, h);
-
-					result.MaxHeightEven += withResult.MaxHeightEven * withoutResult.MaxHeightEven;
-					result.MaxHeightOdd += withResult.MaxHeightEven * withoutResult.MaxHeightOdd;
-					result.MaxHeightEven += withResult.MaxHeightEven * withoutResult.NotMaxHeightEven;
-					result.MaxHeightOdd += withResult.MaxHeightEven * withoutResult.NotMaxHeightOdd;
-
-					result.MaxHeightOdd += withResult.MaxHeightOdd * withoutResult.MaxHeightEven;
-					result.MaxHeightEven += withResult.MaxHeightOdd * withoutResult.MaxHeightOdd;
-					result.MaxHeightOdd += withResult.MaxHeightOdd * withoutResult.NotMaxHeightEven;
-					result.MaxHeightEven += withResult.MaxHeightOdd * withoutResult.NotMaxHeightOdd;
-
-					result.MaxHeightEven += withResult.NotMaxHeightEven * withoutResult.MaxHeightEven;
-					result.MaxHeightOdd += withResult.NotMaxHeightEven * withoutResult.MaxHeightOdd;
-					result.NotMaxHeightEven += withResult.NotMaxHeightEven * withoutResult.NotMaxHeightEven;
-					result.NotMaxHeightOdd += withResult.NotMaxHeightEven * withoutResult.NotMaxHeightOdd;
-
-					result.MaxHeightOdd += withResult.NotMaxHeightOdd * withoutResult.MaxHeightEven;
-					result.MaxHeightEven += withResult.NotMaxHeightOdd * withoutResult.MaxHeightOdd;
-					result.NotMaxHeightOdd += withResult.NotMaxHeightOdd * withoutResult.NotMaxHeightEven;
-					result.NotMaxHeightEven += withResult.NotMaxHeightOdd * withoutResult.NotMaxHeightOdd;
-				}
-
-				_withoutBaseResults.Add(request, result);
-				return result;
-			}
-		}
-
-		static BigInteger ChooseConsecutive(BigInteger n, BigInteger k)
-		{
-			BigInteger a = 1;
-			BigInteger e = 0;
-			
-			for (BigInteger i = 0; i < (n - k); i++)
-			{
-				a = a * 2 + e;
-
-				if (i == 0)
-				{
-					e = 1;
-				}
-				else
-				{
-					e += e;
-				}
+				Result withResult = WithBase(i, h);
+				Result withoutResult = WithoutBase(w - i - 1, h);
+				Result total = withResult * withoutResult;
+				result += total;
 			}
 
-			return a;
+			_withoutBaseResults.Add(request, result);
+			return result;
 		}
 
 		/// <summary>
