@@ -127,10 +127,6 @@ namespace Problem502
 				return result;
 			}
 			
-			Request request = new Request();
-			request.Width = w;
-			request.Height = h;
-			
 			Result subResult = WithoutBase(w, h - 1);
 
 			result.MaxHeightEven = subResult.MaxHeightOdd;
@@ -164,7 +160,7 @@ namespace Problem502
 				return result;
 			}
 			
-			Request request = new Request();
+			Request request;
 			request.Width = w;
 			request.Height = h;
 
