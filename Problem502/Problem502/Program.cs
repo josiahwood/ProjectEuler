@@ -167,19 +167,19 @@ namespace Problem502
 
 			for (BigInteger i = 0; i <= w; i++)
 			{
-				Result withResult;
+				Result subResult0;
 
 				if (i == 0)
 				{
-					withResult = Result.OneEven;
+					subResult0 = Result.OneEven;
 				}
 				else
 				{
-					withResult = SubSolve(i, h - 1).Swap;
+					subResult0 = SubSolve(i, h - 1).Swap;
 				}
 
-				Result withoutResult = SubSolve(w - i - 1, h);
-				Result total = withResult * withoutResult;
+				Result subResult1 = SubSolve(w - i - 1, h);
+				Result total = subResult0 * subResult1;
 				result += total;
 			}
 
