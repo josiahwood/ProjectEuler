@@ -179,7 +179,7 @@ namespace Problem502
 
 		public static Result SubSolve(BigInteger w, BigInteger h)
 		{
-			if (w <= 0 || h == 0)
+			if (w == 0 || h == 0)
 			{
 				return Result.OneEven;
 			}
@@ -195,9 +195,9 @@ namespace Problem502
 				return result;
 			}
 
-			result = SubSolve(w - 1, h);
+			result = SubSolve(w - 1, h) + SubSolve(w, h - 1).Swap;
 
-			for (BigInteger i = 1; i <= w; i++)
+			for (BigInteger i = 1; i < w; i++)
 			{
 				Result subResult0 = SubSolve(i, h - 1).Swap;
 				Result subResult1 = SubSolve(w - i - 1, h);
