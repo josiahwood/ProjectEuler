@@ -137,17 +137,22 @@ namespace Problem502.UnitTests
 			Assert.AreEqual<BigInteger>(6, result.Odd);
 #endif
 		}
-		/*
+		
 		[TestMethod]
-		public void WithoutBase4_2()
+		public void SubSolve4_2()
 		{
-			Result result = Program.WithoutBase(4, 2);
+			Result result = Program.SubSolve(4, 2);
+#if MODULUS
 			Assert.AreEqual<ulong>(44, result.MaxHeightEven);
 			Assert.AreEqual<ulong>(21, result.MaxHeightOdd);
 			Assert.AreEqual<ulong>(6, result.NotMaxHeightEven);
 			Assert.AreEqual<ulong>(10, result.NotMaxHeightOdd);
+#else
+			Assert.AreEqual<BigInteger>(50, result.Even);
+			Assert.AreEqual<BigInteger>(31, result.Odd);
+#endif
 		}
-
+		/*
 		[TestMethod]
 		public void WithBase4_3()
 		{

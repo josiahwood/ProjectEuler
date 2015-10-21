@@ -121,6 +121,8 @@ namespace Problem502
 		[STAThread]
 		static void Main(string[] args)
 		{
+			Help();
+			
 			//BigInteger result0 = F(BigInteger.Pow(10, 12), 100);
 			//Console.WriteLine(result0.MaxHeightEven);
 
@@ -128,6 +130,34 @@ namespace Problem502
 			Console.WriteLine(result1);
 			
 			Console.Read();
+		}
+
+		static void Help()
+		{
+			const int size = 10;
+			Matrix<double> a = CreateMatrix.Dense<double>(size, size);
+			Matrix<double> b = CreateMatrix.Dense<double>(size, 1);
+
+			for (int i = 0; i < size; i++)
+			{
+				long x = i + 1;
+				Result result = Solve(8, x * 2);
+				long y = (long)(result.Even - result.Odd);
+
+				long xe = 1;
+
+				for (int j = 0; j < size; j++)
+				{
+					a[i, j] = xe;
+					xe *= x;
+				}
+
+				b[i, 0] = y;
+			}
+
+			Matrix<double> c = a.Inverse() * b;
+			double[] coefficients = c.Column(0).ToArray();
+			return;
 		}
 
 #if MODULUS
@@ -165,19 +195,11 @@ namespace Problem502
 				return result;
 			}
 
-			for (BigInteger i = 0; i <= w; i++)
+			result = SubSolve(w - 1, h);
+
+			for (BigInteger i = 1; i <= w; i++)
 			{
-				Result subResult0;
-
-				if (i == 0)
-				{
-					subResult0 = Result.OneEven;
-				}
-				else
-				{
-					subResult0 = SubSolve(i, h - 1).Swap;
-				}
-
+				Result subResult0 = SubSolve(i, h - 1).Swap;
 				Result subResult1 = SubSolve(w - i - 1, h);
 				Result total = subResult0 * subResult1;
 				result += total;
