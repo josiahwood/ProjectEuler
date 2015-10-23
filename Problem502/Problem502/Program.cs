@@ -29,27 +29,33 @@ namespace Problem502
 			}
 		}
 	}
-	
+
 	public struct Result
 	{
 		public static readonly Result OneEven = new Result(1, 0);
 		public static readonly Result OneOdd = new Result(0, 1);
 
 #if MODULUS
-		public ulong MaxHeightOdd;
-		public ulong MaxHeightEven;
-		public ulong NotMaxHeightOdd;
-		public ulong NotMaxHeightEven;
+		public ulong Even;
+		public ulong Odd;
 #else
 		public BigInteger Even;
 		public BigInteger Odd;
 #endif
 
-		public Result(BigInteger even, BigInteger odd)
+#if MODULUS
+		public Result(ulong even, ulong odd)
 		{
 			Even = even;
 			Odd = odd;
 		}
+#else
+        public Result(BigInteger even, BigInteger odd)
+		{
+			Even = even;
+			Odd = odd;
+		}
+#endif
 
 		public static Result operator +(Result left, Result right)
 		{
@@ -78,6 +84,11 @@ namespace Problem502
 				return new Result(Odd, Even);
 			}
 		}
+
+		public override string ToString()
+		{
+			return string.Format("{0}, {1}", Even, Odd);
+		}
 	}
 
 	public class Program
@@ -96,7 +107,7 @@ namespace Problem502
 		{
 			return (a + b) % (long)Mod;
 		}
-		
+
 		public static ulong Multiply(ulong a, ulong b)
 		{
 			return (a * b) % Mod;
@@ -117,18 +128,21 @@ namespace Problem502
 			return a * b;
 		}
 #endif
-		
+
 		[STAThread]
 		static void Main(string[] args)
 		{
-			Help();
-			
+			//Help();
+
 			//BigInteger result0 = F(BigInteger.Pow(10, 12), 100);
 			//Console.WriteLine(result0.MaxHeightEven);
 
-			BigInteger result1 = F(10000, 10000);
-			Console.WriteLine(result1);
-			
+			//BigInteger result1 = F(10000, 10000);
+			//Console.WriteLine(result1);
+
+			ulong result = WidthBound(10, 13);
+			Console.WriteLine(result);
+
 			Console.Read();
 		}
 
@@ -166,10 +180,18 @@ namespace Problem502
 		public static BigInteger F(BigInteger w, BigInteger h)
 #endif
 		{
-			Result result0 = Solve(w, h);
-			Result result1 = Solve(w, h - 1);
+			if (w < h)
+			{
+				return WidthBound((int)w, h);
+			}
+			else
+			{
 
-			return result0.Even - result1.Even;
+				Result result0 = Solve(w, h);
+				Result result1 = Solve(w, h - 1);
+
+				return (Mod + (result0.Even % Mod) - (result1.Even % Mod)) % Mod;
+			}
 		}
 
 		public static Result Solve(BigInteger w, BigInteger h)
@@ -207,6 +229,61 @@ namespace Problem502
 
 			_results.Add(request, result);
 			return result;
+		}
+
+		public static ulong WidthBound(int w, BigInteger h)
+		{
+			if (w == 0 || h == 0)
+			{
+				return 1;
+			}
+
+			Result[] current = new Result[w];
+			Result[] next = new Result[w];
+
+			for (int i = 0; i < w; i++)
+			{
+				next[i] = Result.OneEven;
+			}
+
+			for (BigInteger i = 1; i < h; i++)
+			{
+				Result[] temp = current;
+				current = next;
+				next = temp;
+
+				for (int j = 1; j <= w; j++)
+				{
+					Result result = Get(next, j - 1) + Get(current, j).Swap;
+
+					for (int k = 1; k < j; k++)
+					{
+						Result subResult0 = Get(current, k).Swap;
+						Result subResult1 = Get(next, j - k - 1);
+						Result total = subResult0 * subResult1;
+						result += total;
+					}
+
+					Set(next, j, result);
+				}
+			}
+
+			return (Mod + (next[w - 1].Odd % Mod) - (current[w - 1].Odd % Mod)) % Mod;
+		}
+
+		static void Set(Result[] values, int w, Result value)
+		{
+			values[w - 1] = value;
+		}
+
+		static Result Get(Result[] values, int w)
+		{
+			if (w == 0)
+			{
+				return Result.OneEven;
+			}
+
+			return values[w - 1];
 		}
 	}
 }

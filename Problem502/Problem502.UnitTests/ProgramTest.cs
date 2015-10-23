@@ -38,10 +38,8 @@ namespace Problem502.UnitTests
 		{
 			Result result = Program.Solve(1, 2);
 #if MODULUS
-			Assert.AreEqual<ulong>(1, result.MaxHeightEven);
-			Assert.AreEqual<ulong>(0, result.MaxHeightOdd);
-			Assert.AreEqual<ulong>(0, result.NotMaxHeightEven);
-			Assert.AreEqual<ulong>(1, result.NotMaxHeightOdd);
+			Assert.AreEqual<ulong>(1, result.Even);
+			Assert.AreEqual<ulong>(1, result.Odd);
 #else
 			Assert.AreEqual<BigInteger>(1, result.Even);
 			Assert.AreEqual<BigInteger>(1, result.Odd);
@@ -53,10 +51,8 @@ namespace Problem502.UnitTests
 		{
 			Result result = Program.SubSolve(1, 2);
 #if MODULUS
-			Assert.AreEqual<ulong>(1, result.MaxHeightEven);
-			Assert.AreEqual<ulong>(0, result.MaxHeightOdd);
-			Assert.AreEqual<ulong>(1, result.NotMaxHeightEven);
-			Assert.AreEqual<ulong>(1, result.NotMaxHeightOdd);
+			Assert.AreEqual<ulong>(2, result.Even);
+			Assert.AreEqual<ulong>(1, result.Odd);
 #else
 			Assert.AreEqual<BigInteger>(2, result.Even);
 			Assert.AreEqual<BigInteger>(1, result.Odd);
@@ -68,10 +64,8 @@ namespace Problem502.UnitTests
 		{
 			Result result = Program.SubSolve(1, 3);
 #if MODULUS
-			Assert.AreEqual<ulong>(0, result.MaxHeightEven);
-			Assert.AreEqual<ulong>(1, result.MaxHeightOdd);
-			Assert.AreEqual<ulong>(2, result.NotMaxHeightEven);
-			Assert.AreEqual<ulong>(1, result.NotMaxHeightOdd);
+			Assert.AreEqual<ulong>(2, result.Even);
+			Assert.AreEqual<ulong>(2, result.Odd);
 #else
 			Assert.AreEqual<BigInteger>(2, result.Even);
 			Assert.AreEqual<BigInteger>(2, result.Odd);
@@ -83,10 +77,8 @@ namespace Problem502.UnitTests
 		{
 			Result result = Program.SubSolve(2, 1);
 #if MODULUS
-			Assert.AreEqual<ulong>(0, result.MaxHeightEven);
-			Assert.AreEqual<ulong>(3, result.MaxHeightOdd);
-			Assert.AreEqual<ulong>(1, result.NotMaxHeightEven);
-			Assert.AreEqual<ulong>(0, result.NotMaxHeightOdd);
+			Assert.AreEqual<ulong>(1, result.Even);
+			Assert.AreEqual<ulong>(3, result.Odd);
 #else
 			Assert.AreEqual<BigInteger>(1, result.Even);
 			Assert.AreEqual<BigInteger>(3, result.Odd);
@@ -98,10 +90,8 @@ namespace Problem502.UnitTests
 		{
 			Result result = Program.SubSolve(2, 2);
 #if MODULUS
-			Assert.AreEqual<ulong>(5, result.MaxHeightEven);
-			Assert.AreEqual<ulong>(0, result.MaxHeightOdd);
-			Assert.AreEqual<ulong>(1, result.NotMaxHeightEven);
-			Assert.AreEqual<ulong>(3, result.NotMaxHeightOdd);
+			Assert.AreEqual<ulong>(6, result.Even);
+			Assert.AreEqual<ulong>(3, result.Odd);
 #else
 			Assert.AreEqual<BigInteger>(6, result.Even);
 			Assert.AreEqual<BigInteger>(3, result.Odd);
@@ -113,10 +103,8 @@ namespace Problem502.UnitTests
 		{
 			Result result = Program.SubSolve(4, 1);
 #if MODULUS
-			Assert.AreEqual<ulong>(5, result.MaxHeightEven);
-			Assert.AreEqual<ulong>(10, result.MaxHeightOdd);
-			Assert.AreEqual<ulong>(1, result.NotMaxHeightEven);
-			Assert.AreEqual<ulong>(0, result.NotMaxHeightOdd);
+			Assert.AreEqual<ulong>(6, result.Even);
+			Assert.AreEqual<ulong>(10, result.Odd);
 #else
 			Assert.AreEqual<BigInteger>(6, result.Even);
 			Assert.AreEqual<BigInteger>(10, result.Odd);
@@ -128,10 +116,8 @@ namespace Problem502.UnitTests
 		{
 			Result result = Program.Solve(4, 2);
 #if MODULUS
-			Assert.AreEqual<ulong>(10, result.MaxHeightEven);
-			Assert.AreEqual<ulong>(5, result.MaxHeightOdd);
-			Assert.AreEqual<ulong>(0, result.NotMaxHeightEven);
-			Assert.AreEqual<ulong>(1, result.NotMaxHeightOdd);
+			Assert.AreEqual<ulong>(10, result.Even);
+			Assert.AreEqual<ulong>(6, result.Odd);
 #else
 			Assert.AreEqual<BigInteger>(10, result.Even);
 			Assert.AreEqual<BigInteger>(6, result.Odd);
@@ -143,10 +129,8 @@ namespace Problem502.UnitTests
 		{
 			Result result = Program.SubSolve(4, 2);
 #if MODULUS
-			Assert.AreEqual<ulong>(44, result.MaxHeightEven);
-			Assert.AreEqual<ulong>(21, result.MaxHeightOdd);
-			Assert.AreEqual<ulong>(6, result.NotMaxHeightEven);
-			Assert.AreEqual<ulong>(10, result.NotMaxHeightOdd);
+			Assert.AreEqual<ulong>(50, result.Even);
+			Assert.AreEqual<ulong>(31, result.Odd);
 #else
 			Assert.AreEqual<BigInteger>(50, result.Even);
 			Assert.AreEqual<BigInteger>(31, result.Odd);
@@ -218,22 +202,37 @@ namespace Problem502.UnitTests
 		[TestMethod]
 		public void F13_10()
 		{
+#if MODULUS
+			ulong result = Program.F(13, 10);
+			Assert.AreEqual<ulong>(3729050610636 % Program.Mod, result);
+#else
 			BigInteger result = Program.F(13, 10);
 			Assert.AreEqual<BigInteger>(3729050610636, result);
+#endif
 		}
 
 		[TestMethod]
 		public void F10_13()
 		{
+#if MODULUS
+			ulong result = Program.F(10, 13);
+			Assert.AreEqual<ulong>(37959702514 % Program.Mod, result);
+#else
 			BigInteger result = Program.F(10, 13);
 			Assert.AreEqual<BigInteger>(37959702514, result);
+#endif
 		}
-		
+
 		[TestMethod]
 		public void F100_100()
 		{
+#if MODULUS
+			ulong result = Program.F(100, 100);
+			Assert.AreEqual<ulong>(841913936, result % Program.Mod);
+#else
 			BigInteger result = Program.F(100, 100);
 			Assert.AreEqual<BigInteger>(841913936, result % 1000000007);
+#endif
 		}
 	}
 }
