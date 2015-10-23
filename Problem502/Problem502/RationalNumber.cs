@@ -57,7 +57,7 @@ namespace Problem502
 			}
 			else
 			{
-				return string.Format("{0} / {1}", Numerator, Denominator);
+				return string.Format("{0}/{1}", Numerator, Denominator);
 			}
 		}
 

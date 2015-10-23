@@ -104,6 +104,16 @@ namespace Problem502
 			return (a + b) % (long)Mod;
 		}
 
+		public static ulong Subtract(ulong a, ulong b)
+		{
+			return (Mod + (a % Mod) - (b % Mod)) % Mod;
+		}
+
+		public static long Subtract(long a, long b)
+		{
+			return ((long)Mod + (a % (long)Mod) - (b % (long)Mod)) % (long)Mod;
+		}
+
 		public static ulong Multiply(ulong a, ulong b)
 		{
 			return (a * b) % Mod;
@@ -117,6 +127,11 @@ namespace Problem502
 		public static BigInteger Add(BigInteger a, BigInteger b)
 		{
 			return a + b;
+		}
+
+		public static BigInteger Subtract(BigInteger a, BigInteger b)
+		{
+			return a - b;
 		}
 
 		public static BigInteger Multiply(BigInteger a, BigInteger b)
@@ -144,27 +159,49 @@ namespace Problem502
 			//result = WidthBound(100, 100);
 			//Console.WriteLine(result);
 
-			result = WidthBound(10000, 10000);
-			Console.WriteLine(result);
+			//result = WidthBound(10000, 10000);
+			//Console.WriteLine(result);
 
 			Console.Read();
 		}
 
 		static void Help()
 		{
-			const int size = 10;
-			RationalMatrix a = new RationalMatrix(size, size);
-			RationalMatrix b = new RationalMatrix(size, 1);
+			int matrixSize = 11;
 
-			for (int i = 0; i < size; i++)
+			for (int i = 1; i <= 10; i++)
+			{
+				Console.WriteLine("Width = {0}", i);
+				Console.WriteLine("  Odd Heights");
+				Console.Write("    ");
+				HelpIteration(matrixSize, i, false);
+				Console.WriteLine("  Even Heights");
+				Console.Write("    ");
+				HelpIteration(matrixSize, i, true);
+			}
+			return;
+		}
+
+		static void HelpIteration(int matrixSize, BigInteger width, bool evenHeights)
+		{
+			RationalMatrix a = new RationalMatrix(matrixSize, matrixSize);
+			RationalMatrix b = new RationalMatrix(matrixSize, 1);
+
+			for (int i = 0; i < matrixSize; i++)
 			{
 				long x = (i + 1) * 2;
-				Result result = Solve(6, x);
+
+				if (!evenHeights)
+				{
+					x--;
+				}
+
+				Result result = Solve(width, x);
 				long y = (long)result.Odd;
 
 				long xe = 1;
 
-				for (int j = 0; j < size; j++)
+				for (int j = 0; j < matrixSize; j++)
 				{
 					a[i, j] = new RationalNumber(xe, 1);
 					xe *= x;
@@ -175,7 +212,42 @@ namespace Problem502
 
 			RationalMatrix c = RationalMatrix.GaussianElimination(a, b);
 			RationalNumber[] coefficients = c.Column(0);
-			return;
+
+			bool printed = false;
+
+			for (int i = matrixSize - 1; i >= 0; i--)
+			{
+				if (coefficients[i] > RationalNumber.Zero)
+				{
+					if (printed && coefficients[i] > RationalNumber.Zero)
+					{
+						Console.Write("+");
+					}
+
+					printed = true;
+				}
+
+				if (coefficients[i] != RationalNumber.Zero)
+				{
+					Console.Write(coefficients[i]);
+
+					if (i == 0)
+					{
+
+					}
+					else if (i == 1)
+					{
+						Console.Write("*h");
+					}
+					else
+					{
+						Console.Write("*h^");
+						Console.Write(i);
+					}
+				}
+			}
+
+			Console.WriteLine();
 		}
 
 #if MODULUS
@@ -184,18 +256,22 @@ namespace Problem502
 		public static BigInteger F(BigInteger w, BigInteger h)
 #endif
 		{
+#if MODULUS
 			if (w < h)
 			{
 				return WidthBound((int)w, h);
 			}
 			else
 			{
-
+#endif
 				Result result0 = Solve(w, h);
 				Result result1 = Solve(w, h - 1);
 
-				return (Mod + (result0.Even % Mod) - (result1.Even % Mod)) % Mod;
+				return Subtract(result0.Even, result1.Even);
+
+#if MODULUS
 			}
+#endif
 		}
 
 		public static Result Solve(BigInteger w, BigInteger h)
@@ -235,6 +311,7 @@ namespace Problem502
 			return result;
 		}
 
+#if MODULUS
 		public static ulong WidthBound(int w, BigInteger h)
 		{
 			if (w == 0 || h == 0)
@@ -279,6 +356,7 @@ namespace Problem502
 
 			return (Mod + (current[w - 1].Odd % Mod) - (previous[w - 1].Odd % Mod)) % Mod;
 		}
+#endif
 
 		static void Set(Result[] values, int w, Result value)
 		{
