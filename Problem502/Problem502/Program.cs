@@ -140,9 +140,9 @@ namespace Problem502
 
 			for (int i = 0; i < size; i++)
 			{
-				long x = i + 1;
-				Result result = Solve(8, x * 2);
-				long y = (long)(result.Even - result.Odd);
+				long x = (i + 1) * 2;
+				Result result = Solve(8, x);
+				long y = (long)result.Even;
 
 				long xe = 1;
 
