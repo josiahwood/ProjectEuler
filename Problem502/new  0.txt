@@ -147,3 +147,25 @@ Even(w, h) = SUM(i=1->w-1,
 			Even(w, h-2) +
 			Even(w-1, h-2) +
 			Odd (w-2, h-1)
+			
+Odd(2,h) = (1/2)h^2-(1/2)h
+
+(for odd heights)
+Odd(3,h) = 1/2*h^3+1/2*h^2
+(for even heights)
+Odd(3,h) = 1/2*h^3-1/2*h^2
+
+(for odd heights)
+Odd(4,h) = 1/2*h^4+1/3*h^3+1/6*h
+(for even heights)
+Odd(4,h) = 1/2*h^4-1/3*h^3+1/3*h
+
+(for odd heights)
+Odd(5,h) = 1/2*h^5+1/6*h^4+1/3*h^2
+(for even heights)
+Odd(5,h) = 1/2*h^5-1/6*h^4+2/3*h^2
+
+(for odd heights)
+Odd(6,h) = 1/2*h^6+1/15*h^5+1/2*h^3-1/15*h
+(for even heights)
+Odd(6,h) = 1/2*h^6-1/15*h^5+5/6*h^3-4/15*h

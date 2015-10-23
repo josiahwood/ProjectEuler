@@ -67,13 +67,9 @@ namespace Problem502
 
 		public static Result operator *(Result left, Result right)
 		{
-			Result result = new Result();
-
-			result.Even += Program.Multiply(left.Even, right.Even);
-			result.Odd += Program.Multiply(left.Even, right.Odd);
-			result.Odd += Program.Multiply(left.Odd, right.Even);
-			result.Even += Program.Multiply(left.Odd, right.Odd);
-
+			Result result;
+			result.Even = Program.Multiply(left.Even, right.Even) + Program.Multiply(left.Odd, right.Odd);
+			result.Odd = Program.Multiply(left.Even, right.Odd) + Program.Multiply(left.Odd, right.Even);
 			return result;
 		}
 
@@ -132,7 +128,7 @@ namespace Problem502
 		[STAThread]
 		static void Main(string[] args)
 		{
-			//Help();
+			Help();
 
 			//BigInteger result0 = F(BigInteger.Pow(10, 12), 100);
 			//Console.WriteLine(result0.MaxHeightEven);
@@ -140,7 +136,15 @@ namespace Problem502
 			//BigInteger result1 = F(10000, 10000);
 			//Console.WriteLine(result1);
 
-			ulong result = WidthBound(10, 13);
+			ulong result;
+
+			//result = WidthBound(10, 13);
+			//Console.WriteLine(result);
+
+			//result = WidthBound(100, 100);
+			//Console.WriteLine(result);
+
+			result = WidthBound(10000, 10000);
 			Console.WriteLine(result);
 
 			Console.Read();
@@ -149,28 +153,28 @@ namespace Problem502
 		static void Help()
 		{
 			const int size = 10;
-			Matrix<double> a = CreateMatrix.Dense<double>(size, size);
-			Matrix<double> b = CreateMatrix.Dense<double>(size, 1);
+			RationalMatrix a = new RationalMatrix(size, size);
+			RationalMatrix b = new RationalMatrix(size, 1);
 
 			for (int i = 0; i < size; i++)
 			{
 				long x = (i + 1) * 2;
-				Result result = Solve(8, x);
-				long y = (long)result.Even;
+				Result result = Solve(6, x);
+				long y = (long)result.Odd;
 
 				long xe = 1;
 
 				for (int j = 0; j < size; j++)
 				{
-					a[i, j] = xe;
+					a[i, j] = new RationalNumber(xe, 1);
 					xe *= x;
 				}
 
-				b[i, 0] = y;
+				b[i, 0] = new RationalNumber(y, 1);
 			}
 
-			Matrix<double> c = a.Inverse() * b;
-			double[] coefficients = c.Column(0).ToArray();
+			RationalMatrix c = RationalMatrix.GaussianElimination(a, b);
+			RationalNumber[] coefficients = c.Column(0);
 			return;
 		}
 
@@ -238,37 +242,42 @@ namespace Problem502
 				return 1;
 			}
 
+			Result[] previous = new Result[w];
 			Result[] current = new Result[w];
-			Result[] next = new Result[w];
 
 			for (int i = 0; i < w; i++)
 			{
-				next[i] = Result.OneEven;
+				current[i] = Result.OneEven;
 			}
 
 			for (BigInteger i = 1; i < h; i++)
 			{
-				Result[] temp = current;
-				current = next;
-				next = temp;
+				if (i % 10 == 0)
+				{
+					Console.WriteLine(i);
+				}
+				
+				Result[] temp = previous;
+				previous = current;
+				current = temp;
 
 				for (int j = 1; j <= w; j++)
 				{
-					Result result = Get(next, j - 1) + Get(current, j).Swap;
+					Result result = Get(current, j - 1) + Get(previous, j).Swap;
 
 					for (int k = 1; k < j; k++)
 					{
-						Result subResult0 = Get(current, k).Swap;
-						Result subResult1 = Get(next, j - k - 1);
+						Result subResult0 = Get(previous, k).Swap;
+						Result subResult1 = Get(current, j - k - 1);
 						Result total = subResult0 * subResult1;
 						result += total;
 					}
 
-					Set(next, j, result);
+					Set(current, j, result);
 				}
 			}
 
-			return (Mod + (next[w - 1].Odd % Mod) - (current[w - 1].Odd % Mod)) % Mod;
+			return (Mod + (current[w - 1].Odd % Mod) - (previous[w - 1].Odd % Mod)) % Mod;
 		}
 
 		static void Set(Result[] values, int w, Result value)
