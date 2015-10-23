@@ -162,11 +162,32 @@ namespace Problem502
 			//result = WidthBound(10000, 10000);
 			//Console.WriteLine(result);
 
+#if MODULUS
+			result = WidthBound(100, BigInteger.Pow(10, 12));
+			Console.WriteLine(result);
+#endif
+
 			Console.Read();
 		}
 
 		static void Help()
 		{
+			int h = 4;
+
+			for (int w = 2; w <= 20; w++)
+			{
+				BigInteger n = Solve(w, h).Even - Solve(w, h - 1).Even;
+				BigInteger d = Solve(w - 1, h).Even - Solve(w - 1, h - 1).Even;
+				RationalNumber r = new RationalNumber(n, d);
+				RationalNumber r2 = r - new RationalNumber(h, 1);
+
+				Console.Write(n);
+				Console.Write(" -> ");
+				Console.Write(r);
+				Console.Write(" = {0} + ", h);
+				Console.WriteLine(r2);
+			}
+
 			int matrixSize = 11;
 
 			for (int i = 1; i <= 10; i++)
@@ -179,6 +200,9 @@ namespace Problem502
 				Console.Write("    ");
 				HelpIteration(matrixSize, i, true);
 			}
+
+			//HelpIteration(101, 100, true);
+
 			return;
 		}
 
@@ -189,17 +213,18 @@ namespace Problem502
 
 			for (int i = 0; i < matrixSize; i++)
 			{
-				long x = (i + 1) * 2;
+				long x = (i + 2) * 2;
 
 				if (!evenHeights)
 				{
 					x--;
 				}
 
-				Result result = Solve(width, x);
-				long y = (long)result.Odd;
+				Result result0 = Solve(width, x);
+				Result result1 = Solve(width, x - 1);
+				BigInteger y = result0.Even - result1.Even;
 
-				long xe = 1;
+				BigInteger xe = 1;
 
 				for (int j = 0; j < matrixSize; j++)
 				{
@@ -329,7 +354,7 @@ namespace Problem502
 
 			for (BigInteger i = 1; i < h; i++)
 			{
-				if (i % 10 == 0)
+				if (i % 100 == 0)
 				{
 					Console.WriteLine(i);
 				}
