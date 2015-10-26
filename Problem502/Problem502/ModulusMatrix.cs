@@ -14,6 +14,18 @@ namespace Problem502
 		private int _columns;
 		private ModulusNumber[,] _values;
 
+		public static ModulusMatrix Identity(int size)
+		{
+			ModulusMatrix result = new ModulusMatrix(size, size);
+
+			for (int i = 0; i < size; i++)
+			{
+				result[i, i] = ModulusNumber.One;
+			}
+
+			return result;
+		}
+
 		public ModulusMatrix(int rows, int columns)
 		{
 			_rows = rows;
@@ -41,7 +53,7 @@ namespace Problem502
 			}
 		}
 
-		public ModulusNumber[] Column(int index)
+		public ModulusNumber[] GetColumn(int index)
 		{
 			ModulusNumber[] column = new ModulusNumber[_rows];
 
@@ -53,6 +65,48 @@ namespace Problem502
 			return column;
 		}
 
+		public void SetColumn(int index, ModulusNumber[] values)
+		{
+			for (int i = 0; i < _rows; i++)
+			{
+				_values[i, index] = values[i];
+			}
+		}
+
+		public void SetRow(int index, ModulusNumber[] values)
+		{
+			for (int i = 0; i < _columns; i++)
+			{
+				_values[index, i] = values[i];
+			}
+		}
+
+		public static bool operator ==(ModulusMatrix left, ModulusMatrix right)
+		{
+			if ((left._columns != right._columns) || (left._rows != right._rows))
+			{
+				throw new Exception("Incompatible matrices");
+			}
+
+			for (int i = 0; i < left._rows; i++)
+			{
+				for (int j = 0; j < left._columns; j++)
+				{
+					if (left[i, j] != right[i, j])
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+
+		public static bool operator !=(ModulusMatrix left, ModulusMatrix right)
+		{
+			return !(left == right);
+		}
+		
 		public static ModulusMatrix operator +(ModulusMatrix left, ModulusMatrix right)
 		{
 			if ((left._columns != right._columns) || (left._rows != right._rows))
@@ -66,7 +120,7 @@ namespace Problem502
 			{
 				for (int j = 0; j < left._columns; j++)
 				{
-					result._values[i, j] += left[i, j] * right[i, j];
+					result._values[i, j] = left[i, j] + right[i, j];
 				}
 			}
 
@@ -98,7 +152,7 @@ namespace Problem502
 
 		public static ModulusMatrix Power(ModulusMatrix matrix, BigInteger power)
 		{
-			ModulusMatrix result = new ModulusMatrix(matrix._rows, matrix._columns);
+			ModulusMatrix result = ModulusMatrix.Identity(matrix._rows);
 
 			byte[] powerBytes = power.ToByteArray();
 			BitArray powerBitArray = new BitArray(powerBytes);
@@ -109,7 +163,7 @@ namespace Problem502
 			{
 				if (powerBitArray[i])
 				{
-					result += powerMatrix;
+					result *= powerMatrix;
 				}
 
 				powerMatrix *= powerMatrix;

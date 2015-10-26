@@ -15,8 +15,20 @@ namespace Problem502.UnitTests
 		[TestMethod]
 		public void PowerTest()
 		{
-			ModulusMatrix matrix = new ModulusMatrix(10, 10);
-			ModulusMatrix powerMatrix = ModulusMatrix.Power(matrix, BigInteger.Pow(10, 12));
+			ModulusMatrix matrix = new ModulusMatrix(2, 2);
+
+			for (int i = 0; i < 2; i++)
+			{
+				for (int j = 0; j < 2; j++)
+				{
+					matrix[i, j] = new ModulusNumber((ulong)(i * 2 + j));
+				}
+			}
+
+			ModulusMatrix manualMatrix = matrix * matrix * matrix;
+			ModulusMatrix powerMatrix = ModulusMatrix.Power(matrix, 3);
+
+			Assert.IsTrue(manualMatrix == powerMatrix);
 		}
 	}
 }

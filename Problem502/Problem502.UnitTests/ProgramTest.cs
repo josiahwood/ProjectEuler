@@ -7,10 +7,10 @@ namespace Problem502.UnitTests
 	[TestClass]
 	public class ProgramTest
 	{
-		[TestMethod]
+		/*[TestMethod]
 		public void Solve1_1()
 		{
-			Result result = Program.Solve(1, 1);
+			EvenOdd result = Program.Solve(1, 1);
 #if MODULUS
 			Assert.AreEqual<ulong>(0, result.Even);
 			Assert.AreEqual<ulong>(1, result.Odd);
@@ -23,7 +23,7 @@ namespace Problem502.UnitTests
 		[TestMethod]
 		public void SubSolve1_1()
 		{
-			Result result = Program.SubSolve(1, 1);
+			EvenOdd result = Program.SubSolve(1, 1);
 #if MODULUS
 			Assert.AreEqual<ulong>(1, result.Even);
 			Assert.AreEqual<ulong>(1, result.Odd);
@@ -36,7 +36,7 @@ namespace Problem502.UnitTests
 		[TestMethod]
 		public void Solve1_2()
 		{
-			Result result = Program.Solve(1, 2);
+			EvenOdd result = Program.Solve(1, 2);
 #if MODULUS
 			Assert.AreEqual<ulong>(1, result.Even);
 			Assert.AreEqual<ulong>(1, result.Odd);
@@ -49,7 +49,7 @@ namespace Problem502.UnitTests
 		[TestMethod]
 		public void SubSolve1_2()
 		{
-			Result result = Program.SubSolve(1, 2);
+			EvenOdd result = Program.SubSolve(1, 2);
 #if MODULUS
 			Assert.AreEqual<ulong>(2, result.Even);
 			Assert.AreEqual<ulong>(1, result.Odd);
@@ -62,7 +62,7 @@ namespace Problem502.UnitTests
 		[TestMethod]
 		public void SubSolve1_3()
 		{
-			Result result = Program.SubSolve(1, 3);
+			EvenOdd result = Program.SubSolve(1, 3);
 #if MODULUS
 			Assert.AreEqual<ulong>(2, result.Even);
 			Assert.AreEqual<ulong>(2, result.Odd);
@@ -75,7 +75,7 @@ namespace Problem502.UnitTests
 		[TestMethod]
 		public void SubSolve2_1()
 		{
-			Result result = Program.SubSolve(2, 1);
+			EvenOdd result = Program.SubSolve(2, 1);
 #if MODULUS
 			Assert.AreEqual<ulong>(1, result.Even);
 			Assert.AreEqual<ulong>(3, result.Odd);
@@ -88,7 +88,7 @@ namespace Problem502.UnitTests
 		[TestMethod]
 		public void SubSolve2_2()
 		{
-			Result result = Program.SubSolve(2, 2);
+			EvenOdd result = Program.SubSolve(2, 2);
 #if MODULUS
 			Assert.AreEqual<ulong>(6, result.Even);
 			Assert.AreEqual<ulong>(3, result.Odd);
@@ -101,7 +101,7 @@ namespace Problem502.UnitTests
 		[TestMethod]
 		public void SubSolve4_1()
 		{
-			Result result = Program.SubSolve(4, 1);
+			EvenOdd result = Program.SubSolve(4, 1);
 #if MODULUS
 			Assert.AreEqual<ulong>(6, result.Even);
 			Assert.AreEqual<ulong>(10, result.Odd);
@@ -114,7 +114,7 @@ namespace Problem502.UnitTests
 		[TestMethod]
 		public void Solve4_2()
 		{
-			Result result = Program.Solve(4, 2);
+			EvenOdd result = Program.Solve(4, 2);
 #if MODULUS
 			Assert.AreEqual<ulong>(10, result.Even);
 			Assert.AreEqual<ulong>(6, result.Odd);
@@ -127,7 +127,7 @@ namespace Problem502.UnitTests
 		[TestMethod]
 		public void SubSolve4_2()
 		{
-			Result result = Program.SubSolve(4, 2);
+			EvenOdd result = Program.SubSolve(4, 2);
 #if MODULUS
 			Assert.AreEqual<ulong>(50, result.Even);
 			Assert.AreEqual<ulong>(31, result.Odd);
@@ -136,6 +136,7 @@ namespace Problem502.UnitTests
 			Assert.AreEqual<BigInteger>(31, result.Odd);
 #endif
 		}
+		 * */
 		/*
 		[TestMethod]
 		public void WithBase4_3()
@@ -200,11 +201,23 @@ namespace Problem502.UnitTests
 		}
 		*/
 		[TestMethod]
+		public void F4_2()
+		{
+#if MODULUS
+			ModulusNumber result = Program.F(4, 2);
+			Assert.AreEqual<ulong>(10, result.Value);
+#else
+			BigInteger result = Program.F(13, 10);
+			Assert.AreEqual<BigInteger>(3729050610636, result);
+#endif
+		}
+		
+		[TestMethod]
 		public void F13_10()
 		{
 #if MODULUS
-			ulong result = Program.F(13, 10);
-			Assert.AreEqual<ulong>(3729050610636 % Program.Mod, result);
+			ModulusNumber result = Program.F(13, 10);
+			Assert.AreEqual<ulong>(3729050610636 % ModulusNumber.Mod, result.Value);
 #else
 			BigInteger result = Program.F(13, 10);
 			Assert.AreEqual<BigInteger>(3729050610636, result);
@@ -215,8 +228,8 @@ namespace Problem502.UnitTests
 		public void F10_13()
 		{
 #if MODULUS
-			ulong result = Program.F(10, 13);
-			Assert.AreEqual<ulong>(37959702514 % Program.Mod, result);
+			ModulusNumber result = Program.F(10, 13);
+			Assert.AreEqual<ulong>(37959702514 % ModulusNumber.Mod, result.Value);
 #else
 			BigInteger result = Program.F(10, 13);
 			Assert.AreEqual<BigInteger>(37959702514, result);
@@ -227,8 +240,8 @@ namespace Problem502.UnitTests
 		public void F100_100()
 		{
 #if MODULUS
-			ulong result = Program.F(100, 100);
-			Assert.AreEqual<ulong>(841913936, result % Program.Mod);
+			ModulusNumber result = Program.F(100, 100);
+			Assert.AreEqual<ulong>(841913936, result.Value % ModulusNumber.Mod);
 #else
 			BigInteger result = Program.F(100, 100);
 			Assert.AreEqual<BigInteger>(841913936, result % 1000000007);

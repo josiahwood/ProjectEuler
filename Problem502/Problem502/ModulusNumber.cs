@@ -17,7 +17,7 @@ namespace Problem502
 
 		public ModulusNumber(ulong value)
 		{
-			Value = value;
+			Value = value % Mod;
 		}
 
 		public override string ToString()
@@ -53,7 +53,7 @@ namespace Problem502
 
 		public static ModulusNumber operator -(ModulusNumber left, ModulusNumber right)
 		{
-			ulong value = (Mod + left.Value - right.Value) % Mod;
+			ulong value = ((Mod + left.Value) - right.Value) % Mod;
 			return new ModulusNumber(value);
 		}
 
