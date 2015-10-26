@@ -12,34 +12,14 @@ namespace Problem502
 		public static readonly EvenOdd OneEven = new EvenOdd(1, 0);
 		public static readonly EvenOdd OneOdd = new EvenOdd(0, 1);
 
-		//#if MODULUS
-		//		public ModulusNumber Even;
-		//		public ModulusNumber Odd;
-		//#else
 		public BigInteger Even;
 		public BigInteger Odd;
-		//#endif
 
-		//#if MODULUS
-		//		public EvenOdd(ulong even, ulong odd)
-		//		{
-		//			Even = new ModulusNumber(even);
-		//			Odd = new ModulusNumber(odd);
-		//		}
-
-		//		public EvenOdd(ModulusNumber even, ModulusNumber odd)
-		//		{
-		//			Even = even;
-		//			Odd = odd;
-		//		}
-
-		//#else
 		public EvenOdd(BigInteger even, BigInteger odd)
 		{
 			Even = even;
 			Odd = odd;
 		}
-		//#endif
 
 		public static EvenOdd operator +(EvenOdd left, EvenOdd right)
 		{
