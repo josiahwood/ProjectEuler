@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Problem502
 {
-	struct ModulusNumber
+	public struct ModulusNumber
 	{
 		public const ulong Mod = 1000000007;
 		
