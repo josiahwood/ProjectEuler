@@ -40,7 +40,7 @@ namespace Problem502
 			}
 		}
 
-		public RationalNumber[] Column(int index)
+		public RationalNumber[] GetColumn(int index)
 		{
 			RationalNumber[] column = new RationalNumber[_rows];
 

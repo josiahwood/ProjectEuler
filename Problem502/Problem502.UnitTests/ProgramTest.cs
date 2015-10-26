@@ -203,49 +203,36 @@ namespace Problem502.UnitTests
 		[TestMethod]
 		public void F4_2()
 		{
-#if MODULUS
 			ModulusNumber result = Program.F(4, 2);
 			Assert.AreEqual<ulong>(10, result.Value);
-#else
-			BigInteger result = Program.F(13, 10);
-			Assert.AreEqual<BigInteger>(3729050610636, result);
-#endif
 		}
 		
 		[TestMethod]
 		public void F13_10()
 		{
-#if MODULUS
 			ModulusNumber result = Program.F(13, 10);
 			Assert.AreEqual<ulong>(3729050610636 % ModulusNumber.Mod, result.Value);
-#else
-			BigInteger result = Program.F(13, 10);
-			Assert.AreEqual<BigInteger>(3729050610636, result);
-#endif
 		}
 
 		[TestMethod]
 		public void F10_13()
 		{
-#if MODULUS
 			ModulusNumber result = Program.F(10, 13);
 			Assert.AreEqual<ulong>(37959702514 % ModulusNumber.Mod, result.Value);
-#else
-			BigInteger result = Program.F(10, 13);
-			Assert.AreEqual<BigInteger>(37959702514, result);
-#endif
 		}
 
 		[TestMethod]
 		public void F100_100()
 		{
-#if MODULUS
 			ModulusNumber result = Program.F(100, 100);
-			Assert.AreEqual<ulong>(841913936, result.Value % ModulusNumber.Mod);
-#else
-			BigInteger result = Program.F(100, 100);
-			Assert.AreEqual<BigInteger>(841913936, result % 1000000007);
-#endif
+			Assert.AreEqual<ulong>(841913936, result.Value);
+		}
+
+		[TestMethod]
+		public void F100_10e12()
+		{
+			ModulusNumber result = Program.F(100, BigInteger.Pow(10, 12));
+			Assert.AreEqual<ulong>(635147632, result.Value);
 		}
 	}
 }
