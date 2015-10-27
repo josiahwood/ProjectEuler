@@ -31,7 +31,11 @@ namespace Problem502
 
 		public static ModulusNumber F(BigInteger w, BigInteger h)
 		{
-			if (w < h)
+			if (w == h)
+			{
+				return SquareBound2.F((int)w, (int)h);
+			}
+			else if(w < h)
 			{
 				return WidthBound.F((int)w, h);
 			}

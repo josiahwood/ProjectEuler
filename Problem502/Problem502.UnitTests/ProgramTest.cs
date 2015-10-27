@@ -243,6 +243,13 @@ namespace Problem502.UnitTests
 		}
 
 		[TestMethod]
+		public void F10000_10000()
+		{
+			ModulusNumber result = Program.F(10000, 10000);
+			Assert.AreEqual<ulong>(749784357, result.Value);
+		}
+
+		[TestMethod]
 		public void F100_10e12()
 		{
 			ModulusNumber result = Program.F(100, BigInteger.Pow(10, 12));
