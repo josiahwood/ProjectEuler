@@ -21,7 +21,7 @@ namespace Problem502.UnitTests
 			{
 				for (int j = 0; j < 2; j++)
 				{
-					matrix[i, j] = new ModulusNumber((ulong)(i * 2 + j));
+					matrix[i, j] = new ModulusNumber((uint)(i * 2 + j));
 				}
 			}
 

@@ -206,7 +206,14 @@ namespace Problem502.UnitTests
 			ModulusNumber result = Program.F(4, 2);
 			Assert.AreEqual<ulong>(10, result.Value);
 		}
-		
+
+		[TestMethod]
+		public void F10_3()
+		{
+			ModulusNumber result = Program.F(10, 3);
+			Assert.AreEqual<ulong>(28479, result.Value);
+		}
+
 		[TestMethod]
 		public void F13_10()
 		{
@@ -226,6 +233,13 @@ namespace Problem502.UnitTests
 		{
 			ModulusNumber result = Program.F(100, 100);
 			Assert.AreEqual<ulong>(841913936, result.Value);
+		}
+
+		[TestMethod]
+		public void F10e12_100()
+		{
+			ModulusNumber result = Program.F(BigInteger.Pow(10, 12), 100);
+			Assert.AreEqual<ulong>(364553235, result.Value);
 		}
 
 		[TestMethod]

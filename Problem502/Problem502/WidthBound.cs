@@ -127,7 +127,7 @@ namespace Problem502
 				}
 			}
 
-			return new ModulusNumber((ulong)(sum.Numerator % ModulusNumber.Mod));
+			return new ModulusNumber((uint)(sum.Numerator % ModulusNumber.Mod));
 		}
 
 		static void Set(EvenOdd[] values, int w, EvenOdd value)

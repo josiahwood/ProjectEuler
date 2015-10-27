@@ -15,17 +15,30 @@ namespace Problem502
 		[STAThread]
 		static void Main(string[] args)
 		{
-			ModulusNumber result;
+			//ModulusNumber result1 = F(BigInteger.Pow(10, 12), 100);
+			//Console.WriteLine(result1);
 
-			result = F(100, BigInteger.Pow(10, 12));
-			Console.WriteLine(result);
+			ModulusNumber result2 = F(10000, 10000);
+			Console.WriteLine(result2);
+
+			//ModulusNumber result3 = F(100, BigInteger.Pow(10, 12));
+			//Console.WriteLine(result3);
+
+			//Console.WriteLine(result1 + result2 + result3);
 
 			Console.Read();
 		}
 
 		public static ModulusNumber F(BigInteger w, BigInteger h)
 		{
-			return WidthBound.F((int)w, h);
+			if (w < h)
+			{
+				return WidthBound.F((int)w, h);
+			}
+			else
+			{
+				return HeightBound.F(w, (int)h);
+			}
 		}
 	}
 }

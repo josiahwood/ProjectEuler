@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EvenOdd.cs" />
+    <Compile Include="HeightBound.cs" />
+    <Compile Include="ModulusEvenOdd.cs" />
     <Compile Include="ModulusMatrix.cs" />
     <Compile Include="ModulusNumber.cs" />
     <Compile Include="Program.cs" />
