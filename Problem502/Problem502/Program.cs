@@ -16,15 +16,18 @@ namespace Problem502
 		static void Main(string[] args)
 		{
 			//ModulusNumber result1 = F(BigInteger.Pow(10, 12), 100);
-			//Console.WriteLine(result1);
+			ModulusNumber result1 = new ModulusNumber(364553235);
+			Console.WriteLine(result1);
 
-			ModulusNumber result2 = F(10000, 10000);
+			//ModulusNumber result2 = F(10000, 10000);
+			ModulusNumber result2 = new ModulusNumber(749784357);
 			Console.WriteLine(result2);
 
 			//ModulusNumber result3 = F(100, BigInteger.Pow(10, 12));
-			//Console.WriteLine(result3);
+			ModulusNumber result3 = new ModulusNumber(635147632);
+			Console.WriteLine(result3);
 
-			//Console.WriteLine(result1 + result2 + result3);
+			Console.WriteLine(result1 + result2 + result3);
 
 			Console.Read();
 		}
