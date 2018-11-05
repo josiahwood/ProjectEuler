@@ -142,56 +142,5 @@ namespace Problem2
 
 			return total;
 		}
-
-		// Use a matrix!
-
-		// F(n) = 4*F(n-3) + F(n-6)
-
-		// [ 1 1 ]n   [ F(n+1) F(n)   ]
-		// [ 1 0 ]  = [ F(n)   F(n-1) ]
-
-		// [ F(n+11) F(n+10) ][ F(n+1) F(n)   ]   [ F(n+11)F(n+1)+F(n+10)F(n) F(n+10)F(n+1)+F(n+9)F(n) ]   [ F(n+12) F(n+11) ]
-		// [ F(n+10) F(n+9)  ][ F(n)   F(n-1) ] = [ F(n+10)F(n+1)+F(n+9)F(n)  F(n+10)F(n)+F(n+9)F(n-1) ] = [ F(n+11) F(n+10) ]
-
-		// 1, 1, 2, 3, 5, 8, 13
-
-		// [ 1 1 ]3   [ 3 2 ]
-		// [ 1 0 ]  = [ 2 1 ]
-
-		//public static long SolveD()
-		//{
-		//	// current total initialize with identity
-		//	long t00 = 1;
-		//	long t01 = 0;  // also t10
-		//	long t11 = 1;
-
-		//	long p00 = 3;
-		//	long p01 = 2;  // also p10
-		//	long p11 = 1;
-
-		//	long target = 4000000;
-
-		//	while (target != 0)
-		//	{
-		//		if (target % 2 != 0)
-		//		{
-		//			long m00 = t00 * p00 + t01 * p01;
-		//			long m01 = t01 * p00 + t11 * p01;
-		//			long m11 = t01 * p01 + t11 * p11;
-		//			t00 = m00;
-		//			t01 = m01;
-		//			t11 = m11;
-		//		}
-
-		//		long n00 = p00 * p00 + p01 * p01;
-		//		long n01 = p01 * p00 + p11 * p01;
-		//		long n11 = p01 * p01 + p11 * p11;
-		//		p00 = n00;
-		//		p01 = n01;
-		//		p11 = n11;
-
-		//		target >>= 1;
-		//	}
-		//}
-	}
+    }
 }
