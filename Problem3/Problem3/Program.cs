@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Problem3
 {
-	class Program
+	public class Program
 	{
 		static void Main(string[] args)
 		{
@@ -18,8 +18,23 @@ namespace Problem3
 			Console.Read();
 		}
 
-		static private long LargestPrimeFactor(long n)
+		static public long LargestPrimeFactor(long n)
 		{
+			if (n < 1)
+			{
+				throw new ArgumentOutOfRangeException("n", "n must be greater than 0");
+			}
+
+			if (n == 1)
+			{
+				return 1;
+			}
+
+			if(n % 2 == 0)
+            {
+				return Math.Max(2, LargestPrimeFactor(n / 2));
+            }
+
 			long i = (long)Math.Sqrt((double)n);
 
 			if (i % 2 == 0)
@@ -39,6 +54,11 @@ namespace Problem3
 
 			long factor1 = i;
 			long factor2 = n / i;
+
+			if(factor1 == 1)
+            {
+				return n;
+            }
 
 			long largestPrimeFactor1 = LargestPrimeFactor(factor1);
 			long largestPrimeFactor2 = LargestPrimeFactor(factor2);
